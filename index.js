@@ -37,40 +37,60 @@ const muestrasRutas = [
   ["/productos", 100],
 ];
 
-function esMedicionValida(valor) {
-  return typeof valor === "number" && !Number.isNaN(valor) && valor >= 0;
-}
-
-let maximo = 1;
-let minimo = 100000000000;
-let media = 0;
 function calculoMatriz(muestrasServidores) {
-  for (i = 0; i < muestrasServidores.length[i]; i++) {
+  for (let i = 0; i < muestrasServidores.length; i++) {
     let fila = muestrasServidores[i];
     let nombreServidor = fila[0];
-    let medicionesValidas = [];
-    for (j = 0; j < fila.length[i][j]; i++) {
-      if(muestrasServidores[i][j] != null && muestrasServidores[i][j] != undefined && muestrasServidores[i][j] == ){
-        if (muestrasServidores[i][j] > maximo) {
-        maximo = muestrasServidores[i][j];
+    let maximo = -Infinity;
+    let minimo = Infinity;
+    let media = 0;
+    let cantidadValidos = 0;
+    for (let j = 1; j < fila.length; j++) {
+      let valor = muestrasServidores[i][j];
+      if (
+        valor != null &&
+        valor != undefined &&
+        typeof valor === "number" &&
+        valor >= 0
+      ) {
+        if (valor > maximo) {
+          maximo = valor;
         }
-        if (muestrasServidores[i][j] < minimo) {
-            minimo = muestrasServidores[i][j];
+        if (valor < minimo) {
+          minimo = valor;
         }
-        media += muestrasServidores[i][j];
+        media += valor;
+        cantidadValidos++;
       }
-        
     }
-    media = media / j;
-    console.log(
-      "Del servidor " +
-        muestrasServidores[i][0] +
-        " su media es: " +
-        media +
-        " su máximo es : " +
-        maximo +
-        " y su mínimo es: " +
-        minimo,
-    );
+    if (cantidadValidos == 0) {
+      console.log("Sin datos válidos");
+    } else {
+      media = media / cantidadValidos;
+      console.log(
+        "Del servidor " +
+          muestrasServidores[i][0] +
+          " su media es: " +
+          media +
+          "ms su máximo es : " +
+          maximo +
+          "ms y su mínimo es: " +
+          minimo +
+          "ms",
+      );
+    }
   }
 }
+calculoMatriz(muestrasServidores);
+
+function analizarIPs(ipsVisitantesRaw) {
+  const ipsUnicas = new Set(ipsVisitantesRaw);
+  const totalEntradas = ipsVisitantesRaw.length;
+  const cantidadesUnicas = ipsUnicas.size;
+  const entradasDuplicadas = totalEntradas - cantidadesUnicas;
+  console.log("Total de entradas: " + totalEntradas);
+  console.log("Direcciones IP únicas: " + cantidadesUnicas);
+  console.log("Entradas duplicadas: " + entradasDuplicadas);
+}
+
+analizarIPs(ipsVisitantesRaw);
